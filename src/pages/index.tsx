@@ -1,10 +1,8 @@
-import { Auth, ThemeSupa } from '@supabase/auth-ui-react'
-import { useUser, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react'
-import { useEffect, useState } from 'react'
+import { useUser } from '@supabase/auth-helpers-react'
 
 const Home = () => {
   const user = useUser()
-
+  console.log(user)
   if (!user) return null
   return (
     <>
