@@ -13,6 +13,9 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
       },
+      fontSize: {
+        "7xl": "91px",
+      }
     },
   },
   plugins: [],

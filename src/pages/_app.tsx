@@ -1,3 +1,4 @@
+import Header from "@/components/header";
 import "@/styles/globals.css";
 import { Database } from "@/types/supabase";
 import { Inter } from '@next/font/google';
@@ -33,7 +34,8 @@ export default function MyApp({
         supabaseClient={supabaseClient}
         initialSession={pageProps.initialSession}
       >
-        <main className={`overflow-hidden font-sans`}>
+        <main className={`font-sans px-10 py-5 h-screen w-screen`}>
+          <Header />
           <Component {...pageProps} />
         </main>
       </SessionContextProvider>
