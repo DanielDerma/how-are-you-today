@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import Login from "./Login"
 import Tooltip from "./Tooltip"
 import logo from '/public/logo.svg'
@@ -10,18 +11,29 @@ const Header = () => {
         <div className="w-[500px]">
           <h1 className="text-7xl font-bold leading-none">how are you today?</h1>
         </div>
-        <div className="flex flex-col">
-          <Image
-            src={logo}
-            alt="logo"
-            width={55}
-            height={55}
-            className="mb-4"
-          />
-          <ul className="gap-y-3">
-            <li>Account</li>
-            <li>About</li>
-            <li>FAQ</li>
+        <div className="flex flex-col items-end">
+          <Link
+            href="/"
+          >
+            <Image
+              src={logo}
+              alt="logo"
+              width={55}
+              height={55}
+              className="mb-4"
+            />
+          </Link>
+
+          <ul className="gap-y-3 font-semibold flex flex-col items-end">
+            <Link href="/account">
+              <li>Account</li>
+            </Link>
+            <Link href="/about">
+              <li>About</li>
+            </Link>
+            <Link href="/faq">
+              <li>FAQ</li>
+            </Link>
           </ul>
         </div>
       </div>

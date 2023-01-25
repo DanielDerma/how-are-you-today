@@ -1,3 +1,4 @@
+import Arrow from "@/icons/Arrow"
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react"
 
 const Login = () => {
@@ -14,8 +15,9 @@ const Login = () => {
     }
   }
   return (
-    <button onClick={handleLogin} className="outline px-2 rounded-full bg-black">
+    <button onClick={handleLogin} className="outline px-2 rounded-full bg-black flex items-center gap-x-2">
       <p className="text-white">{user ? "Sign up" : "Log in"}</p>
+      <Arrow className={`w-4 h-4 text-white ${user ? "rotate-180" : ""}`} />
     </button>
   )
 }
