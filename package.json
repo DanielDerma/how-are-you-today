@@ -10,7 +10,7 @@
     "update-types": "npx supabase gen types typescript --project-id zxdqwowevlbdfqshnuws > src/types/supabase.ts"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.7",
+    "@headlessui/react": "^1.7.9",
     "@next/font": "13.1.2",
     "@supabase/auth-helpers-nextjs": "0.5.2",
     "@supabase/auth-helpers-react": "0.3.1",

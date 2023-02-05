@@ -1,21 +1,65 @@
+import Head from "next/head";
+
+const questions = [
+  {
+    id: 1,
+    question: 'Q: What is the "How Are You Today?" app?',
+    answer:
+      'A: The "How Are You Today?" app is a self-help psychology app that helps users track and improve their mental and emotional well-being. The app collects data through a series of daily questions and provides personalized recommendations and support based on the users behavior and mood.',
+  },
+  {
+    id: 2,
+    question: "Q: What kind of information does the app collect?",
+    answer:
+      "A: The app collects information about the users mood, sleep, physical activity, nutrition, stress levels, self-care and relaxation activities, task and project completion, positive and negative thoughts and emotions, interactions with others, and more.",
+  },
+  {
+    id: 3,
+    question: "Q: How do I use the app?",
+    answer:
+      "A: Simply use the web app on your smartphone and answer the daily questions. You can also track your progress and see personalized recommendations by accessing the dashboard.",
+  },
+  {
+    id: 4,
+    question: "Q: How often do I need to use the app?",
+    answer:
+      "A: It is recommended to use the app every day to get the most benefit and track your progress over time.",
+  },
+  {
+    id: 5,
+    question: "Q: How much does the app cost?",
+    answer: "A: The app is free to use.",
+  },
+  {
+    id: 6,
+    question: "Q: Is my information safe and secure?",
+    answer:
+      "A: Yes, the app takes privacy and security very seriously and uses the latest encryption and security measures to protect the users information.",
+  },
+  {
+    id: 7,
+    question: "Q: Can the app provide professional help or therapy?",
+    answer:
+      "A: The app is not a substitute for professional help or therapy, but it can provide support and resources for those seeking to improve their mental and emotional well-being.",
+  },
+];
+
 const faq = () => {
   return (
-    <div className="columns-2">
-      <p>Q: What is TweetMood?</p>
-      <p>A: TweetMood is an app that uses natural language processing to analyze tweets from a user and describe their personality and emotions.</p>
-      <p>Q: Is this app for commercial use? </p>
-      <p>A: No, TweetMood is for educational purposes only and does not have any commercial use.</p>
-      <p>Q: Is the information collected by the app private? </p>
-      <p>A: No, the information analyzed by the app is all publicly available tweets, nothing private is being collect.</p>
+    <>
+      <Head>
+        <title>FAQ | How Are You Today?</title>
+      </Head>
+      <div className="md:columns-2">
+        {questions.map((question) => (
+          <div key={question.id} className="mb-4">
+            <p className="font-semibold">{question.question}</p>
+            <p className="font-medium">{question.answer}</p>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+};
 
-      <p className="break-before-column">Q: Is this app in compliance with Twitter&apos;s terms of service?</p>
-      <p>A: Yes, the app only analyzes publicly available tweets and is in compliance with Twitter&apos;s terms of service.</p>
-      <p>Q: Is there any risk of using this app?</p>
-      <p>A: No, there is no risk associated with using this app as it only analyzes publicly available information.</p>
-      <p>Q: Why should I use this app?</p>
-      <p>A: The app can be used for educational purposes, such as learning more about natural language processing and understanding how emotions and personalities can be determined from tweets.</p>
-    </div>
-  )
-}
-
-export default faq
+export default faq;
