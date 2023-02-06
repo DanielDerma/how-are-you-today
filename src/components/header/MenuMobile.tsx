@@ -1,13 +1,13 @@
 import { useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { forwardRef } from "react";
+import Login from "./Login";
 
-const MenuMobile = () => {
+const Menu = () => {
   const user = useUser();
   const { pathname } = useRouter();
   return (
-    <ul className="flex flex-col items-end gap-y-3 border-2 bg-white p-4 md:rounded-lg md:border-0 md:p-0">
+    <ul className="z-50 flex w-36 flex-col items-end gap-y-3 border-2 bg-white p-4 md:rounded-lg md:border-0 md:p-0">
       <Link href="/" className={`${pathname === "/" ? "font-semibold" : ""}`}>
         <li>Home</li>
       </Link>
@@ -34,8 +34,9 @@ const MenuMobile = () => {
       >
         <li>FAQ</li>
       </Link>
+      <Login />
     </ul>
   );
 };
 
-export default MenuMobile;
+export default Menu;

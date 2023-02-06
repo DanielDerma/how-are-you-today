@@ -1,5 +1,6 @@
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
+import Chart from "@/components/Chart";
 
 type PageProps = {
   initialSession: any;
@@ -7,7 +8,14 @@ type PageProps = {
 };
 
 const Summary: NextPage<PageProps> = ({ initialSession, user }) => {
-  return <div>Summary</div>;
+  return (
+    <div className="grid grid-cols-1 grid-rows-[repeat(4,200px)] gap-10 md:grid-cols-2 md:grid-rows-[repeat(2,200px)] ">
+      <Chart />
+      <Chart />
+      <Chart />
+      <Chart />
+    </div>
+  );
 };
 
 export default Summary;

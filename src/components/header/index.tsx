@@ -1,19 +1,11 @@
 import { Menu } from "@headlessui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { forwardRef } from "react";
 import Login from "./Login";
 import MenuOptions from "./Menu";
+import MenuOptionsMobile from "./MenuMobile";
 import Tooltip from "./Tooltip";
 import logo from "/public/logo.svg";
-
-const MyLink = forwardRef((props: any, ref) => {
-  let { href, children, ...rest } = props;
-  return <Link href={href}>{children}</Link>;
-});
-MyLink.displayName = "MyLink";
 
 const Header = () => {
   const user = useUser();
@@ -47,7 +39,7 @@ const Header = () => {
             </Menu.Button>
             <Menu.Items className="absolute right-0">
               <Menu.Item>
-                <MenuOptions />
+                <MenuOptionsMobile />
               </Menu.Item>
             </Menu.Items>
           </Menu>

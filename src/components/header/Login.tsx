@@ -17,9 +17,11 @@ const Login = () => {
   return (
     <button
       onClick={handleLogin}
-      className="flex items-center gap-x-2 rounded-full border-2 border-black bg-black px-2"
+      className="flex max-w-max items-center rounded-full border-2 border-black bg-black px-2"
     >
-      <p className="font-medium text-white">{user ? "Sign up" : "Log in"}</p>
+      <p className="mr-2 font-medium text-white">
+        {user ? "Sign up" : "Log in"}
+      </p>
       <Arrow className={`h-4 w-4  text-white ${user ? "rotate-180" : ""}`} />
     </button>
   );

@@ -6,10 +6,9 @@ import one from "/public/one.svg";
 
 const Tooltip = () => {
   const user = useUser();
-
   return (
     <div className="">
-      {user && (
+      {/* {user && (
         <div className="flex gap-x-4">
           <div className="flex items-center gap-x-2 rounded-full border-2 border-black px-2">
             <Image src={one} alt="two" height="29.67" width="14.35" />
@@ -24,7 +23,7 @@ const Tooltip = () => {
             <p className="font-semibold">Neutral</p>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
