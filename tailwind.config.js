@@ -15,7 +15,19 @@ module.exports = {
       },
       fontSize: {
         "7xl": "91px",
-      }
+      },
+      animation: {
+        perspective: "perspective 1.2s infinite",
+      },
+      keyframes: {
+        perspective: {
+          "0%": { transform: "perspective(120px)" },
+          " 50%": { transform: "perspective(120px) rotateY(180deg)" },
+          "100%": {
+            transform: "perspective(120px) rotateY(180deg)  rotateX(180deg)",
+          },
+        },
+      },
     },
   },
   plugins: [],

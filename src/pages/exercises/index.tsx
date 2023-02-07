@@ -1,58 +1,61 @@
 import Modal from "@/components/Modal";
-import { mood, nutrition, physical, sleep } from "@/constants/exercises";
+import { Database } from "@/types/supabase";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type PageProps = {
   initialSession: any;
   user: any;
 };
 
-type Form = {
-  mood_rating: string;
-  mood_journal: string;
-  mood_events: string;
-  sleep_hours: string;
-  sleep_bedtime: string;
-  sleep_caffeine: string;
-  physical_hours: string;
-  physical_activities: string;
-  physical_challenges: string;
-  nutrition_food: string;
-  nutrition_meals: string;
-  nutrition_rating: string;
-  nutrition_challenges: string;
-};
-
 const Exercises: NextPage<PageProps> = ({ initialSession, user }) => {
+  const supabaseClient = useSupabaseClient<Database>();
   const [loading, setLoading] = useState(true);
+  const [text, setText] = useState("Working with AI Model...");
+  const [data, setData] = useState<any>([]);
   const [isOpen, setIsOpen] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const dataJson = await fetch("/api/questions");
+      const { data } = await dataJson.json();
+      setLoading(false);
+      setIsOpen(false);
+      setData(data);
+    };
+    if (user) loadData();
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    const interval2 = setInterval(() => {
+      setText("Generating new problems with AI...");
+    }, 4000);
+
+    return () => {
+      clearInterval(interval2);
+    };
+  }, []);
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const form: Form = {
-      mood_rating: data.get("mood_rating") as string,
-      mood_journal: data.get("mood_journal") as string,
-      mood_events: data.get("mood_events") as string,
-      sleep_hours: data.get("sleep_hours") as string,
-      sleep_bedtime: data.get("sleep_bedtime") as string,
-      sleep_caffeine: data.get("sleep_caffeine") as string,
-      physical_hours: data.get("physical_hours") as string,
-      physical_activities: data.get("physical_activities") as string,
-      physical_challenges: data.get("physical_challenges") as string,
-      nutrition_food: data.get("nutrition_food") as string,
-      nutrition_meals: data.get("nutrition_meals") as string,
-      nutrition_rating: data.get("nutrition_rating") as string,
-      nutrition_challenges: data.get("nutrition_challenges") as string,
-    };
+    const formData = new FormData(event.target as HTMLFormElement);
+    const entries = formData.entries();
+    console.log(entries);
+    const data = Object.fromEntries(entries);
+    console.log(data);
   };
-  return (
-    <div>
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} />
-    </div>
-  );
+  if (loading) {
+    return (
+      <div>
+        <Head>
+          <title>Exercises | How Are You Today?</title>
+        </Head>
+        <Modal text={text} isOpen={isOpen} setIsOpen={setIsOpen} />
+      </div>
+    );
+  }
   return (
     <>
       <Head>
@@ -60,65 +63,75 @@ const Exercises: NextPage<PageProps> = ({ initialSession, user }) => {
       </Head>
       <div>
         <form onSubmit={handleSubmit}>
-          <h3 className="font-semibold">Mood:</h3>
-          <div className="">
-            {mood.map((e) => (
-              <div className="" key={e.id}>
-                <label htmlFor={e.question}>{e.question}</label>
-                <input
-                  name={e.name}
-                  type={e.type}
-                  className=""
-                  key={e.id}
-                  required
-                />
+          <div className="grid grid-cols-2 grid-rows-2">
+            <div className="">
+              <h3 className="font-semibold">Mood:</h3>
+              <div className="">
+                {data.mood.map((e: any, i: any) => (
+                  <div className="" key={e.id}>
+                    <label htmlFor={`question_mood_${i}`}>{e}</label>
+                    <input
+                      name={`mood_${e}`}
+                      type="text"
+                      className=""
+                      key={e.id}
+                      required
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <h3 className="font-semibold">Sleep:</h3>
-          <div className="">
-            {sleep.map((e) => (
-              <div className="" key={e.id}>
-                <label htmlFor={e.question}>{e.question}</label>
-                <input
-                  name={e.name}
-                  type={e.type}
-                  className=""
-                  key={e.id}
-                  required
-                />
+            </div>
+            <div className="">
+              <h3 className="font-semibold">Sleep:</h3>
+              <div className="">
+                {data.sleep.map((e: any, i: any) => (
+                  <div className="" key={e.id}>
+                    <label htmlFor={`question_sleep_${i}`}>{e}</label>
+                    <input
+                      name={`sleep_${e}`}
+                      type="text"
+                      className=""
+                      key={e.id}
+                      required
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <h3 className="font-semibold">Physical:</h3>
-          <div className="">
-            {physical.map((e) => (
-              <div className="" key={e.id}>
-                <label htmlFor={e.question}>{e.question}</label>
-                <input
-                  name={e.name}
-                  type={e.type}
-                  className=""
-                  key={e.id}
-                  required
-                />
+            </div>
+            <div className="">
+              <h3 className="font-semibold">Physical:</h3>
+              <div className="">
+                {data.physical.map((e: any, i: any) => (
+                  <div className="" key={e.id}>
+                    <label htmlFor={`question_physical_${i}`}>{e}</label>
+                    <input
+                      name={`physical_${e}`}
+                      type="text"
+                      className=""
+                      key={e.id}
+                      required
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <h3 className="font-semibold">Nutrition:</h3>
-          <div className="">
-            {nutrition.map((e) => (
-              <div className="" key={e.id}>
-                <label htmlFor={e.question}>{e.question}</label>
-                <input
-                  name={e.name}
-                  type={e.type}
-                  className=""
-                  key={e.id}
-                  required
-                />
+            </div>
+            <div className="">
+              <h3 className="font-semibold">Nutrition:</h3>
+              <div className="">
+                {data.nutrition.map((e: any, i: any) => (
+                  <div className="" key={e.id}>
+                    <label htmlFor={`question_nutrition_${i}`}>{e}</label>
+                    <input
+                      name={`nutrition_${e}`}
+                      type="text"
+                      className=""
+                      key={e.id}
+                      required
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
           <button type="submit">Submit</button>
         </form>

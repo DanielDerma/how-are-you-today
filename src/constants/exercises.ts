@@ -1,9 +1,9 @@
 export const mood = [
   {
     id: 1,
-    question: "Rate your mood on a scale of 1-10",
-    name: "mood_rating",
-    type: "range",
+    question: "How would you describe your mood today?",
+    name: "mood_feel",
+    type: "text",
   },
   {
     id: 2,

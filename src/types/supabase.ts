@@ -9,7 +9,29 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      [_ in never]: never
+      exercises: {
+        Row: {
+          created_at: string | null
+          id: number
+          question: string | null
+          type: string | null
+          userId: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          question?: string | null
+          type?: string | null
+          userId?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          question?: string | null
+          type?: string | null
+          userId?: string | null
+        }
+      }
     }
     Views: {
       [_ in never]: never

@@ -10,10 +10,10 @@ type PageProps = {
 const Summary: NextPage<PageProps> = ({ initialSession, user }) => {
   return (
     <div className="grid grid-cols-1 grid-rows-[repeat(4,200px)] gap-10 md:grid-cols-2 md:grid-rows-[repeat(2,200px)] ">
-      <Chart />
-      <Chart />
-      <Chart />
-      <Chart />
+      <Chart title="Mood" />
+      <Chart title="Sleep" />
+      <Chart title="Physical" />
+      <Chart title="Nutrition" />
     </div>
   );
 };
