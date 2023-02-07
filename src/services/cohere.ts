@@ -1,48 +1,107 @@
+import MODELS_EXAMPLES from "@/constants/ml_examples";
+import type { separateResponses } from "@/utils";
+
 import cohere from "cohere-ai";
-cohere.init(process.env.COHERE_API || "");
+cohere.init("gqg1O2uUDIN3TZJ3D4Q8irvPDGFEr56IHSeRMaXv");
 
-const inputs = ["This is a sad situation"];
+const getPredictions = (prediction: string) => {
+  if (prediction === "Excellent") return 2;
+  if (prediction === "Good") return 1;
+  if (prediction === "Bad") return 0;
+  return 0;
+};
 
-const examples = [
-  {
-    text: "I feel so bad",
-    label: "sad",
-  },
-  {
-    text: "I feel so good",
-    label: "happy",
-  },
-  {
-    text: "I'm feeling empty",
-    label: "sad",
-  },
-  {
-    text: "I'm feeling full bad bad",
-    label: "sad",
-  },
-  {
-    text: "I'm not feeling anything",
-    label: "sad",
-  },
-  {
-    text: "I'm feeling great",
-    label: "happy",
-  },
-];
-
-export const example = async () => {
-  const response = await cohere.classify({
-    inputs,
-    examples,
+export const outputQuestions = async (data: typeof separateResponses) => {
+  const callQuestions = Object.entries(data).map(([key, value]) => {
+    const examples = MODELS_EXAMPLES[key as keyof typeof MODELS_EXAMPLES];
+    return cohere.classify({
+      inputs: value,
+      examples,
+    });
   });
-  return response;
+
+  const questions = await Promise.all(callQuestions);
+
+  console.log(questions);
+
+  const clasify = {
+    mood: questions[0].body.classifications.reduce(
+      (acc, curr) => {
+        return {
+          prediction: acc.prediction + getPredictions(curr.prediction),
+          confidence: acc.confidence + curr.confidence,
+        };
+      },
+      {
+        prediction: 0,
+        confidence: 0,
+      }
+    ),
+    sleep: questions[1].body.classifications.reduce(
+      (acc, curr) => {
+        return {
+          prediction: acc.prediction + getPredictions(curr.prediction),
+          confidence: acc.confidence + curr.confidence,
+        };
+      },
+      {
+        prediction: 0,
+        confidence: 0,
+      }
+    ),
+    physical: questions[2].body.classifications.reduce(
+      (acc, curr) => {
+        return {
+          prediction: acc.prediction + getPredictions(curr.prediction),
+          confidence: acc.confidence + curr.confidence,
+        };
+      },
+      {
+        prediction: 0,
+        confidence: 0,
+      }
+    ),
+  };
+
+  const prom_classify = {
+    mood: {
+      prediction: Math.ceil(
+        clasify.mood.prediction / questions[0].body.classifications.length
+      ),
+      confidence:
+        clasify.mood.confidence / questions[0].body.classifications.length,
+    },
+    sleep: {
+      prediction: Math.ceil(
+        clasify.sleep.prediction / questions[1].body.classifications.length
+      ),
+      confidence:
+        clasify.sleep.confidence / questions[1].body.classifications.length,
+    },
+    physical: {
+      prediction: Math.ceil(
+        clasify.physical.prediction / questions[2].body.classifications.length
+      ),
+      confidence:
+        clasify.physical.confidence / questions[2].body.classifications.length,
+    },
+  };
+
+  return {
+    mood_confidence: prom_classify.mood.confidence,
+    mood_prediction: prom_classify.mood.prediction,
+    physical_confidence: prom_classify.physical.confidence,
+    physical_prediction: prom_classify.physical.prediction,
+    sleep_confidence: prom_classify.sleep.confidence,
+    sleep_prediction: prom_classify.sleep.prediction,
+  };
 };
 
 export const generateQuestions = async () => {
   const callQuestions = ["mood", "sleep", "physical", "nutrition"].map((item) =>
     cohere.generate({
       model: "command-xlarge-20221108",
-      prompt: `Generate 2 psychology questions about a patient's ${item} behavior today, numbered 1. and 2.`,
+      prompt: `Generate 3 questions about ${item} behavior for a patient, numbered 1. 2. and 3.`,
       max_tokens: 500,
       temperature: 1.2,
       k: 0,

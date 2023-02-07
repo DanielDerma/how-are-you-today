@@ -1,5 +1,7 @@
 import Modal from "@/components/Modal";
+import { outputQuestions } from "@/services/cohere";
 import { Database } from "@/types/supabase";
+import { canInvoice, separateResponses } from "@/utils";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
@@ -9,9 +11,14 @@ import { useEffect, useState } from "react";
 type PageProps = {
   initialSession: any;
   user: any;
+  canInvoice: string;
 };
 
-const Exercises: NextPage<PageProps> = ({ initialSession, user }) => {
+const Exercises: NextPage<PageProps> = ({
+  initialSession,
+  user,
+  canInvoice,
+}) => {
   const supabaseClient = useSupabaseClient<Database>();
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState("Working with AI Model...");
@@ -26,8 +33,8 @@ const Exercises: NextPage<PageProps> = ({ initialSession, user }) => {
       setIsOpen(false);
       setData(data);
     };
-    if (user) loadData();
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (user && canInvoice) loadData();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const interval2 = setInterval(() => {
@@ -38,14 +45,51 @@ const Exercises: NextPage<PageProps> = ({ initialSession, user }) => {
       clearInterval(interval2);
     };
   }, []);
+
+  const updateData = async (data: any) => {
+    try {
+      const { error } = await supabaseClient.from("tracking").insert(data);
+      if (error) {
+        console.log(error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement);
     const entries = formData.entries();
-    console.log(entries);
-    const data = Object.fromEntries(entries);
-    console.log(data);
+    const dataEntries = Object.fromEntries(entries);
+    const data = separateResponses(dataEntries);
+    outputQuestions(data as any)
+      .then((res) => {
+        return updateData({ userId: user, ...res });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        console.log("done");
+      });
   };
+
+  if (!canInvoice) {
+    return (
+      <div>
+        <Head>
+          <title>Exercises | How Are You Today?</title>
+        </Head>
+        <Modal
+          text="Wait 24hr, You only can do this once a day."
+          isCanInvoice
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
+      </div>
+    );
+  }
   if (loading) {
     return (
       <div>
@@ -68,13 +112,12 @@ const Exercises: NextPage<PageProps> = ({ initialSession, user }) => {
               <h3 className="font-semibold">Mood:</h3>
               <div className="">
                 {data.mood.map((e: any, i: any) => (
-                  <div className="" key={e.id}>
+                  <div className="" key={`question_mood_${i}`}>
                     <label htmlFor={`question_mood_${i}`}>{e}</label>
                     <input
                       name={`mood_${e}`}
                       type="text"
                       className=""
-                      key={e.id}
                       required
                     />
                   </div>
@@ -85,13 +128,12 @@ const Exercises: NextPage<PageProps> = ({ initialSession, user }) => {
               <h3 className="font-semibold">Sleep:</h3>
               <div className="">
                 {data.sleep.map((e: any, i: any) => (
-                  <div className="" key={e.id}>
+                  <div className="" key={`question_sleep_${i}`}>
                     <label htmlFor={`question_sleep_${i}`}>{e}</label>
                     <input
                       name={`sleep_${e}`}
                       type="text"
                       className=""
-                      key={e.id}
                       required
                     />
                   </div>
@@ -102,13 +144,12 @@ const Exercises: NextPage<PageProps> = ({ initialSession, user }) => {
               <h3 className="font-semibold">Physical:</h3>
               <div className="">
                 {data.physical.map((e: any, i: any) => (
-                  <div className="" key={e.id}>
+                  <div className="" key={`physical_${e}`}>
                     <label htmlFor={`question_physical_${i}`}>{e}</label>
                     <input
                       name={`physical_${e}`}
                       type="text"
                       className=""
-                      key={e.id}
                       required
                     />
                   </div>
@@ -119,13 +160,12 @@ const Exercises: NextPage<PageProps> = ({ initialSession, user }) => {
               <h3 className="font-semibold">Nutrition:</h3>
               <div className="">
                 {data.nutrition.map((e: any, i: any) => (
-                  <div className="" key={e.id}>
+                  <div className="" key={`question_nutrition_${i}`}>
                     <label htmlFor={`question_nutrition_${i}`}>{e}</label>
                     <input
                       name={`nutrition_${e}`}
                       type="text"
                       className=""
-                      key={e.id}
                       required
                     />
                   </div>
@@ -142,11 +182,11 @@ const Exercises: NextPage<PageProps> = ({ initialSession, user }) => {
 
 export default Exercises;
 
-export const getServerSideProps: GetServerSideProps<PageProps> = async (
+export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
   // Create authenticated Supabase Client
-  const supabase = createServerSupabaseClient(ctx);
+  const supabase = createServerSupabaseClient<Database>(ctx);
   // Check if we have a session
   const {
     data: { session },
@@ -160,10 +200,17 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
       },
     };
 
+  const { data } = await supabase
+    .from("tracking")
+    .select("created_at")
+    .eq("userId", session.user.id)
+    .single();
+
   return {
     props: {
       initialSession: session,
-      user: session.user,
+      user: session.user.id,
+      canInvoice: canInvoice(data?.created_at),
     },
   };
 };

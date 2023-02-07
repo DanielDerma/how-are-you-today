@@ -1,14 +1,18 @@
+import Arrow from "@/icons/Arrow";
 import { Dialog, Transition } from "@headlessui/react";
+import Link from "next/link";
 import { Fragment } from "react";
 
 export default function MyModal({
   isOpen,
   setIsOpen,
   text,
+  isCanInvoice,
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   text: string;
+  isCanInvoice?: boolean;
 }) {
   function closeModal() {
     setIsOpen(false);
@@ -52,7 +56,17 @@ export default function MyModal({
                   {text}
                 </Dialog.Title>
                 <div role="status" className="flex justify-center">
-                  <span className="animate-perspective inline-flex h-6 w-6 bg-black"></span>
+                  {isCanInvoice ? (
+                    <Link
+                      href="/"
+                      className="flex max-w-max items-center rounded-full border-2 border-black bg-black px-2"
+                    >
+                      <p className="mr-2 font-medium text-white">Go Home</p>
+                      <Arrow className={`h-4 w-4  text-white`} />
+                    </Link>
+                  ) : (
+                    <span className="inline-flex h-6 w-6 animate-perspective bg-black"></span>
+                  )}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

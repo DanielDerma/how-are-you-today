@@ -32,6 +32,41 @@ export interface Database {
           userId?: string | null
         }
       }
+      tracking: {
+        Row: {
+          created_at: string | null
+          id: number
+          mood_confidence: number | null
+          mood_prediction: number | null
+          physical_confidence: number | null
+          physical_prediction: number | null
+          sleep_confidence: number | null
+          sleep_prediction: number | null
+          userId: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          mood_confidence?: number | null
+          mood_prediction?: number | null
+          physical_confidence?: number | null
+          physical_prediction?: number | null
+          sleep_confidence?: number | null
+          sleep_prediction?: number | null
+          userId?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          mood_confidence?: number | null
+          mood_prediction?: number | null
+          physical_confidence?: number | null
+          physical_prediction?: number | null
+          sleep_confidence?: number | null
+          sleep_prediction?: number | null
+          userId?: string | null
+        }
+      }
     }
     Views: {
       [_ in never]: never
