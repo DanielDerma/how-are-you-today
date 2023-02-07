@@ -7,6 +7,7 @@ import { canInvoice, separateResponses } from "@/utils";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
+import { generateQuestions } from "@/services/cohere";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
@@ -33,12 +34,10 @@ const Exercises: NextPage<PageProps> = ({
   useEffect(() => {
     const loadData = async () => {
       console.count("loadData");
-      const dataJson = await fetch("/api/questions");
-      console.log(dataJson);
-      const { data } = await dataJson.json();
+      const response = await generateQuestions();
       setLoading(false);
       setIsOpen(false);
-      setData(data);
+      setData(response);
     };
     if (user && canInvoice && data.length === 0) loadData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
