@@ -7,12 +7,12 @@ export default function MyModal({
   isOpen,
   setIsOpen,
   text,
-  isCanInvoice,
+  isDone,
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   text: string;
-  isCanInvoice?: boolean;
+  isDone?: boolean;
 }) {
   function closeModal() {
     setIsOpen(false);
@@ -56,12 +56,14 @@ export default function MyModal({
                   {text}
                 </Dialog.Title>
                 <div role="status" className="flex justify-center">
-                  {isCanInvoice ? (
+                  {isDone ? (
                     <Link
-                      href="/"
+                      href="/summary"
                       className="flex max-w-max items-center rounded-full border-2 border-black bg-black px-2"
                     >
-                      <p className="mr-2 font-medium text-white">Go Home</p>
+                      <p className="mr-2 font-medium text-white">
+                        Go To Summary
+                      </p>
                       <Arrow className={`h-4 w-4  text-white`} />
                     </Link>
                   ) : (

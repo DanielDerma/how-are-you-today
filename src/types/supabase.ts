@@ -38,6 +38,8 @@ export interface Database {
           id: number
           mood_confidence: number | null
           mood_prediction: number | null
+          nutrition_confidence: number | null
+          nutrition_prediction: number | null
           physical_confidence: number | null
           physical_prediction: number | null
           sleep_confidence: number | null
@@ -49,6 +51,8 @@ export interface Database {
           id?: number
           mood_confidence?: number | null
           mood_prediction?: number | null
+          nutrition_confidence?: number | null
+          nutrition_prediction?: number | null
           physical_confidence?: number | null
           physical_prediction?: number | null
           sleep_confidence?: number | null
@@ -60,6 +64,8 @@ export interface Database {
           id?: number
           mood_confidence?: number | null
           mood_prediction?: number | null
+          nutrition_confidence?: number | null
+          nutrition_prediction?: number | null
           physical_confidence?: number | null
           physical_prediction?: number | null
           sleep_confidence?: number | null

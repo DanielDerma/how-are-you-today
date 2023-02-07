@@ -2,7 +2,9 @@ import Arrow from "@/icons/Arrow";
 import { useUser } from "@supabase/auth-helpers-react";
 import Head from "next/head";
 import Link from "next/link";
-
+import flor from "/public/flor.jpg";
+import face from "/public/face.jpg";
+import Image from "next/image";
 const Home = () => {
   const user = useUser();
   if (!user) return null;
@@ -13,7 +15,7 @@ const Home = () => {
       </Head>
       <div className=" grid grid-cols-1 grid-rows-1 gap-x-5 gap-y-5 md:grid-cols-[1fr_65%] ">
         <div className="flex min-h-[370px] flex-col justify-between rounded-xl border-2 bg-[#f6f6f6] p-10 ">
-          <div className="h-20 w-20 rounded-full bg-red-400"></div>
+          <Image width={80} height={80} src={flor} alt="flor" />
           <div className="">
             <h2 className="text-4xl font-semibold">
               <p>Discover our</p>
@@ -29,7 +31,7 @@ const Home = () => {
           </div>
         </div>
         <div className="mb-5 flex min-h-[370px] flex-col justify-between rounded-xl border-2 bg-[#f6f6f6] p-10 md:mb-0">
-          <div className="h-20 w-20 rounded-full bg-red-400"></div>
+          <Image width={80} height={80} src={face} alt="face" />
           <div className="">
             <h2 className="text-4xl font-semibold">
               <p>Track your</p>

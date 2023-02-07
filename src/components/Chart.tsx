@@ -14,9 +14,11 @@ import two from "/public/two.svg";
 const Prediction = ({
   prediction,
   confidence,
+  title,
 }: {
   prediction: any;
   confidence: any;
+  title: string;
 }) => {
   console.log(prediction);
   if (prediction === 2)
@@ -51,7 +53,7 @@ const Prediction = ({
           <p className="font-semibold">Bad</p>
         </div>
         Your certainty is {String(confidence).split(".")[1].slice(0, 2)}%
-        <p>You can work in your mood by doing some exercise, meditation.</p>
+        <p>Dont worry one day at a time!</p>
       </div>
     );
 
@@ -75,7 +77,11 @@ const Chart = ({
       return (
         <div className="custom-tooltip rounded-lg border-2 border-black bg-white p-4">
           <p className="label">{`${label}`}</p>
-          <Prediction prediction={prediction} confidence={confidence} />
+          <Prediction
+            prediction={prediction}
+            confidence={confidence}
+            title={title}
+          />
         </div>
       );
     }

@@ -61,6 +61,18 @@ export const outputQuestions = async (data: typeof separateResponses) => {
         confidence: 0,
       }
     ),
+    nutrition: questions[3].body.classifications.reduce(
+      (acc, curr) => {
+        return {
+          prediction: acc.prediction + getPredictions(curr.prediction),
+          confidence: acc.confidence + curr.confidence,
+        };
+      },
+      {
+        prediction: 0,
+        confidence: 0,
+      }
+    ),
   };
 
   const prom_classify = {
@@ -85,6 +97,13 @@ export const outputQuestions = async (data: typeof separateResponses) => {
       confidence:
         clasify.physical.confidence / questions[2].body.classifications.length,
     },
+    nutrition: {
+      prediction: Math.ceil(
+        clasify.nutrition.prediction / questions[3].body.classifications.length
+      ),
+      confidence:
+        clasify.nutrition.confidence / questions[2].body.classifications.length,
+    },
   };
 
   return {
@@ -94,6 +113,8 @@ export const outputQuestions = async (data: typeof separateResponses) => {
     physical_prediction: prom_classify.physical.prediction,
     sleep_confidence: prom_classify.sleep.confidence,
     sleep_prediction: prom_classify.sleep.prediction,
+    nutrition_confidence: prom_classify.nutrition.confidence,
+    nutrition_prediction: prom_classify.nutrition.prediction,
   };
 };
 
