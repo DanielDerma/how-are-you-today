@@ -34,6 +34,7 @@ const Exercises: NextPage<PageProps> = ({
     const loadData = async () => {
       console.count("loadData");
       const dataJson = await fetch("/api/questions");
+      console.log(dataJson);
       const { data } = await dataJson.json();
       setLoading(false);
       setIsOpen(false);
